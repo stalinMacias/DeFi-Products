@@ -27,18 +27,28 @@ module.exports = {
   }
 }
 ```
-## Addresses
+## Addresses - from mainnet
 DAI=0x6b175474e89094c44da98b954eedeac495271d0f
-DAI_WHALE=0x5777d92f208679db4b9778590fa3cab3ac9e2168
+DAI_WHALE=0x7c8CA1a587b2c4c40fC650dB8196eE66DC9c46F4
+
+UNISWAP_V2_ROUTER=0x7a250d5630b4cf539739df2c5dacb4c659f2488d
+WETH=0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+WBTC=0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599
+
 
 <br>
 
 ## Forking Ganache unlocking an account - Run the below commands in the console
 
-DAI_WHALE=0x5777d92f208679db4b9778590fa3cab3ac9e2168
-INFURA_API_KEY=<INFURA_API_KEY>
+### The below parameters are defined in the .env file
+  DAI_WHALE=0x7c8CA1a587b2c4c40fC650dB8196eE66DC9c46F4
+  INFURA_API_KEY=<INFURA_API_KEY>
 
+
+#### Load the .env variables into the console
+source ./.env
+
+#### Run the ganache-cli --form command directly from the console
 * npx ganache-cli --fork https://mainnet.infura.io/v3/$INFURA_API_KEY \
 --unlock $DAI_WHALE \
 --networkId 999
-
