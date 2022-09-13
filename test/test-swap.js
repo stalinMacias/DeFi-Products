@@ -48,8 +48,7 @@ contract("Testing a swap from DAI to WBTC" , (accounts) => {
     } catch(error) {
       console.log(error);
     }
-      
-    //console.log("response: ", resp);
+
     console.log(`out ${await tokenOut.balanceOf(TO)}`);
   })
 
