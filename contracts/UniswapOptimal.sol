@@ -9,8 +9,8 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
 /**
  * @dev These functions only requires how many tokens from one of the two tokens in a pool will be added as liquidity
- * internally, the functions calculates how many tokens of the other token will be required to perform a swap using all the tokens that the user wants to add as liquidity
- * Once the functions have estimated the required tokens, a swap is performed to get the exact amount of the token B so all the tokens A can be added as liquidity
+ * internally, the functions calculates how many tokens of the other token will be required, and then perform a swap using all the tokensA that the user wants to add as liquidity
+ * Once the functions have estimated the required tokensB, a swap is performed to get the exact amount of the token B so all the tokens A can be added as liquidity
  * After the swap is perfomed, the token A & token B are sent as liquidity to the pool
  * And, voahala, no tokens are left, all the token A was added as liquidity and the reserve ratio in the pool is remain
 */
@@ -71,8 +71,9 @@ contract UniswapOptimal {
       // swap from token1 to token0
       swapAmount = getSwapAmount(reserve1, _amountA);
     }
-
+    // Swaps tokensA for the optimal amount of tokensB so all the tokensA (what is left) can be added as liquidity
     _swap(_tokenA, _tokenB, swapAmount);
+    // Add as liquidity what is left from tokenA after swapping the optimal amount of tokensB to add all the tokenA liquidity
     _addLiquidity(_tokenA, _tokenB);
   }
 
@@ -91,6 +92,11 @@ contract UniswapOptimal {
     _addLiquidity(_tokenA, _tokenB);
   }
 
+  /**
+   * @dev The OUTPUT_TOKENS are sent to this contract, which allows to add the liquidity right after the swap is completed
+   * @dev The tokensA that'll be used to make the swap comes from the original amount that was sent to the zap() function
+   * @dev -  Returns the optimal amount of tokensB that'll be used to add what is left of tokensA as liquidity
+  */
   function _swap(
     address _from,
     address _to,
@@ -112,6 +118,10 @@ contract UniswapOptimal {
     );
   }
 
+  /**
+   * @dev The tokensA that'll be added as liquidity is what is left after swapping the optimal amount of tokensB
+   * @dev The tokensB were obtained from swapping some tokensA
+  */
   function _addLiquidity(address _tokenA, address _tokenB) internal {
     uint balA = IERC20(_tokenA).balanceOf(address(this));
     uint balB = IERC20(_tokenB).balanceOf(address(this));
