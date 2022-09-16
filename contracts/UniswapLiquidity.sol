@@ -40,35 +40,42 @@ contract UniswapLiquidity {
     IERC20(_tokenA).transferFrom(address(this), msg.sender, remainingTokenA);
     IERC20(_tokenB).transferFrom(address(this), msg.sender, remainingTokenB);
     
-
-    address pair = IUniswapV2Factory(UNISWAP_FACTORY).getPair(_tokenA, _tokenB);
+    // Update the total provider's liquidity - total liquidity that a provider helds on this contract
     liquidityOwnership[msg.sender] = liquidityOwnership[msg.sender] + liquidity;
+    
+    // Retrieve the total liquidity provider tokens that this contract helds
+    address pair = IUniswapV2Factory(UNISWAP_FACTORY).getPair(_tokenA, _tokenB);
     uint contractOriginalLiquidity = IERC20(pair).balanceOf(address(this));
 
-    emit Log("amountA", amountA);
-    emit Log("amountB", amountB);
-    emit Log("liquidity", liquidity);
+    emit Log("amountA added to the pool: ",amountA);
+    emit Log("amountB added to the pool: ",amountB);
+    emit Log("Liquidity added to the pool: ",liquidity);
     emit Log("Total liquidity held by the provider", liquidityOwnership[msg.sender]);
     emit Log("Total liquidity provider tokens held in this contract: ", contractOriginalLiquidity);
 
     uint totalTokenA = IERC20(_tokenA).balanceOf(address(this));
     emit Log("Total tokenA held in this contract: ", totalTokenA);
-
     uint totalTokenAInPool = IERC20(_tokenA).balanceOf(pair);
     emit Log("Total tokenA held in the pool contract: ", totalTokenAInPool);
+
+    uint totalTokenB = IERC20(_tokenB).balanceOf(address(this));
+    emit Log("Total tokenB held in this contract: ", totalTokenB);
+    uint totalTokenBInPool = IERC20(_tokenB).balanceOf(pair);
+    emit Log("Total tokenB held in the pool contract: ", totalTokenBInPool);
 
   }
 
   function removeLiquidity(address _tokenA, address _tokenB) external {
     uint liquidity = liquidityOwnership[msg.sender]; // Provider's total liquidity
-    require(liquidity > 0, "Error, this address does not have provider any liquidity");
+    require(liquidity > 0, "Error, this address have not provided any liquidity");
 
     address pair = IUniswapV2Factory(UNISWAP_FACTORY).getPair(_tokenA, _tokenB);
     uint contractOriginalLiquidity = IERC20(pair).balanceOf(address(this));
 
-    // Set provider's liquidity to 0
-    liquidityOwnership[msg.sender] = 0;
     IERC20(pair).approve(UNISWAP_ROUTER, liquidity);
+
+    // Set provider's liquidity to 0 - prevent reentrancy
+    liquidityOwnership[msg.sender] = 0; 
     // Remove provider's liquidity from this contract and send tokens A & B to te provider's address
     (uint amountA, uint amountB) = IUniswapV2Router02(UNISWAP_ROUTER).removeLiquidity(_tokenA,_tokenB,liquidity,1,1,msg.sender,block.timestamp);
 
@@ -80,9 +87,14 @@ contract UniswapLiquidity {
 
     uint totalTokenA = IERC20(_tokenA).balanceOf(address(this));
     emit Log("Total tokenA held in this contract: ", totalTokenA);
+    uint totalTokenAInPool = IERC20(_tokenA).balanceOf(pair);
+    emit Log("Total tokenA held in the pool contract: ", totalTokenAInPool);
+
+    uint totalTokenB = IERC20(_tokenB).balanceOf(address(this));
+    emit Log("Total tokenB held in this contract: ", totalTokenB);
+    uint totalTokenBInPool = IERC20(_tokenB).balanceOf(pair);
+    emit Log("Total tokenB held in the pool contract: ", totalTokenBInPool);
 
   }
-
-
-
+  
 }
