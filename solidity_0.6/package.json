@@ -1,0 +1,22 @@
+{
+  "name": "mainnet-fork",
+  "version": "1.0.0",
+  "description": "Forked from Ethereum Mainnet - Contracts version 0.6.6 (Uniswap Compatible)",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@uniswap/v2-core": "^1.0.1",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
+    "dotenv": "^16.0.2",
+    "ganache-cli": "^6.12.2",
+    "truffle": "^5.5.28"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "StalinMacias",
+  "license": "ISC"
+}
