@@ -30,7 +30,7 @@ contract UniswapV2Twap_PriceOracle {
   // NOTE: IUniswapV2Pair
   /**
    * @dev constructor() basically initializes the values for the global variables by retrieving the current information from the token's pair at the moment of the contract's creation
-   * @param {IUniswapV2Pair} _pair - This is the address of the token's pair, but it is received as an IUniswapV2Pair, by doing this is possible to make direct calls to the pair's contract  <---> _pair.functionName()
+   * @param _pair - This is the address of the token's pair, but it is received as an IUniswapV2Pair, by doing this is possible to make direct calls to the pair's contract  <---> _pair.functionName()
    * - If _pair were received as an address, before calling any function from the pair's contract, it would be required to cast the _pair from an address to an IUniswapV2Pair                <---> IUniswapV2Pair(_pair).functionName()
   */
   constructor(IUniswapV2Pair _pair) public {

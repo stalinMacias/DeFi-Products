@@ -29,8 +29,17 @@ contract("UniswapV2Twap_PriceOracle", (accounts) => {
   beforeEach(async () => {
     tokenA = await IERC20.at(TOKEN_A);
     tokenB = await IERC20.at(TOKEN_B);
+
+
+
+    // This PriceOracle contracts requires that a Pair Token contract is deployed in the blockchain, otherwise it wont' work //
+    // For the mainnet_fork project there is no a contract for the Pair we want to work with ///
+    // Moving on from this test on this project and replicating it in the local blockchain //
     contractUniswapV2Twap_PriceOracle = await UniswapV2Twap_PriceOracle.new();
 
+    
+    
+    
     // send ETH to cover tx fee
     await sendEther(web3, accounts[0], TOKEN_A_WHALE, 1);
     await sendEther(web3, accounts[0], TOKEN_B_WHALE, 1);
