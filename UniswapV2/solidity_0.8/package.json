@@ -1,7 +1,7 @@
 {
   "name": "mainnet-fork",
   "version": "1.0.0",
-  "description": "Forked from Ethereum Mainnet",
+  "description": "Forked from Ethereum Mainnet - Contracts version 0.8 (Latest)",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
