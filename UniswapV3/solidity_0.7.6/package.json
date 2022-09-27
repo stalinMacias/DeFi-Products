@@ -1,0 +1,20 @@
+{
+  "name": "uniswap_v3",
+  "version": "1.0.0",
+  "description": "Practicing interaction with Uniswap V3 Contracts",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stalin Macias",
+  "license": "ISC"
+}

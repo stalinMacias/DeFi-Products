@@ -1,0 +1,14 @@
+{
+  "name": "mainnet-fork",
+  "version": "1.0.0",
+  "description": "Forked from Ethereum Mainnet - Contracts version 0.8\"",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stalin Macias",
+  "license": "ISC"
+}
