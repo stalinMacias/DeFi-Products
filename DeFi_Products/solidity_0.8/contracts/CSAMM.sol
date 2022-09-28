@@ -63,12 +63,77 @@ contract CSAMM {
 
     // transfer token out
     tokenOut.transfer(msg.sender, amountOut);
-
   }
 
+  /**
+   * @dev addLiquidity() function does not validate if the tokens addresses are correct because it inherits all the validations from the ERC20 token itself
+   * When the transferFrom() function is called, all the validation made at the ERC20 contract's side will determine if the transfer is executed or if it fails.
+   * If the transfer fails, because the transactions behaves as a singular executable component, all the transaction will be reverted
+   */
+  function addLiquidity(uint _amount0, uint _amount1) external returns (uint shares) {
+    token0.transferFrom(msg.sender, address(this), _amount0);
+    token1.transferFrom(msg.sender, address(this), _amount1);
 
+    uint currentReserve0 = token0.balanceOf(address(this));
+    uint currentReserve1 = token1.balanceOf(address(this));
 
+    uint newLiquidityToken0 = currentReserve0 - reserve0;
+    uint newLiquidityToken1 = currentReserve1 - reserve1;
 
+    /*
+    a = amount in
+    L = total liquidity
+    s = shares to mint
+    T = total supply
 
+    s should be proportional to increase from L to L + a
+    (L + a) / L = (T + s) / T
+
+    s = a * T / L
+    */
+    if (totalSupply == 0) {
+      shares = newLiquidityToken0 + newLiquidityToken1;
+    } else {
+      shares = ((newLiquidityToken0 + newLiquidityToken1) * totalSupply) / (reserve0 + reserve1);
+    }
+
+    require(shares > 0, "No new shares were minted");
+    _mint(msg.sender, shares);
+
+    _update(currentReserve0, currentReserve1);
+  }
+
+  function removeLiquidity(uint _shares) external returns (uint returnedTokens0, uint returnedTokens1) {
+    // calculate the amount of tokens 0 & 1 to return
+    /*
+    a = amount out
+    L = total liquidity
+    s = shares
+    T = total supply
+
+    a / L = s / T
+
+    a = L * s / T
+      = (reserve0 + reserve1) * s / T
+    */
+    require(_shares > 0, "Error, no shares were sent to remove liquidity");
+    returnedTokens0 = (reserve0  * _shares) / totalSupply;
+    returnedTokens1 = (reserve1  * _shares) / totalSupply;
+
+    // burn the shares
+    _burn(msg.sender, _shares);
+
+    // update reserve0 and reserve1 state variables
+    _update(reserve0 - returnedTokens0, reserve1 - returnedTokens1);
+    
+    // transfer the tokens out to the provider's address
+    if (returnedTokens0 > 0) {
+      token0.transfer(msg.sender, returnedTokens0);
+    }
+
+    if (returnedTokens1 > 0) {
+      token1.transfer(msg.sender, returnedTokens1);
+    }
+  }
 
 }
