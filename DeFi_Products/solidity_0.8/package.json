@@ -10,5 +10,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stalin Macias",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bn.js": "^5.2.1",
+    "dotenv": "^16.0.2",
+    "path": "^0.12.7"
+  }
 }

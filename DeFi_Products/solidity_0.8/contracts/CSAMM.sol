@@ -3,8 +3,9 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IERC20.sol";
 
-// CSAMM stanfs for Constant Sum Auto Market Maker
+// CSAMM stands for Constant Sum Auto Market Maker
 // CSAMM are not really used in DeFi real products, but CSAMM are useful for education purposes
+// A CSAMM can be think of as a Uniswap Liquidity Pool for a Pair of ERC20 Tokens
 
 contract CSAMM {
 
@@ -17,18 +18,24 @@ contract CSAMM {
   uint public totalSupply;  // totalShares minted
   mapping(address => uint) public balanceOf;  // shares owned by each provider
 
+  event WithdrawLiquidity(uint returnTokens0, uint returnTokens1);
+
   constructor(address _token0, address _token1) {
     token0 = IERC20(_token0);
     token1 = IERC20(_token1);
   }
 
+  function getSharesPerProvider(address _provider) public view returns(uint) {
+    return balanceOf[_provider];
+  }
+
   function _mint(address _to, uint _amount) private {
-    balanceOf[msg.sender] += _amount;
+    balanceOf[_to] += _amount;
     totalSupply += _amount;
   }
 
   function _burn(address _from, uint _amount) private {
-    balanceOf[msg.sender] -= _amount;
+    balanceOf[_from] -= _amount;
     totalSupply -= _amount;
   }
 
@@ -39,17 +46,20 @@ contract CSAMM {
 
   function swap(address _tokenIn, uint _amountIn) external returns (uint amountOut) {
     require(_tokenIn == address(token0) || _tokenIn == address(token1) , "_tokenIn is not a valid token for this CSAMM");
-    
+ 
     // transfer token in
-    uint amountIn;
     bool isToken0 = (_tokenIn == address(token0));
+    
     (IERC20 tokenIn, IERC20 tokenOut, uint reserveIn, uint reserveOut) = isToken0 
       ? (token0, token1, reserve0, reserve1) 
-      : (token1, token0, reserve1, reserve0) ;
+      : (token1, token0, reserve1, reserve0);
+
+    require(tokenIn.allowance(msg.sender,address(this)) >= _amountIn, "Not enough tokens have been approved");
 
     tokenIn.transferFrom(msg.sender, address(this), _amountIn);
-    amountIn = tokenIn.balanceOf(address(this)) - reserveIn;
-    
+
+    uint amountIn = tokenIn.balanceOf(address(this)) - reserveIn;
+
     // calculate amount of tokens out (including fees)
     // 3% fee = 0.3%
     amountOut = (amountIn / 997) * 1000;
@@ -59,6 +69,7 @@ contract CSAMM {
       ? (reserveIn + _amountIn, reserveOut - amountOut)
       : (reserveOut - amountOut, reserveIn + _amountIn );
 
+    // Update the internal reserves of the two tokens in this contract
     _update(res0, res1);
 
     // transfer token out
@@ -134,6 +145,9 @@ contract CSAMM {
     if (returnedTokens1 > 0) {
       token1.transfer(msg.sender, returnedTokens1);
     }
+
+    emit WithdrawLiquidity(returnedTokens0,returnedTokens1);
+
   }
 
 }
