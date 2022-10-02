@@ -79,7 +79,7 @@ contract CSAMM {
   /**
    * @dev addLiquidity() function does not validate if the tokens addresses are correct because it inherits all the validations from the ERC20 token itself
    * When the transferFrom() function is called, all the validation made at the ERC20 contract's side will determine if the transfer is executed or if it fails.
-   * If the transfer fails, because the transactions behaves as a singular executable component, all the transaction will be reverted
+   * If the transfer fails at any point, all the previous steps of the transaction will be reverted because the transactions behaves as a singular executable component.
    */
   function addLiquidity(uint _amount0, uint _amount1) external returns (uint shares) {
     token0.transferFrom(msg.sender, address(this), _amount0);
