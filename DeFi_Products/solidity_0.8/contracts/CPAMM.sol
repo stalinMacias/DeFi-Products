@@ -5,14 +5,16 @@ import "./interfaces/IERC20.sol";
 
 // contract to emulate a Constant Product Auto Market Maker (CPAMM)
 contract CPAMM {
-  IERC20 immutable token0;
-  IERC20 immutable token1;
+  IERC20 public immutable token0;
+  IERC20 public immutable token1;
 
   uint public reserve0;
   uint public reserve1;
 
   uint public totalSupply;            // Keeps track of the total active shares
   mapping(address => uint) balanceOf; // Keeps track of the shares per Provider
+
+  event WithdrawLiquidity(uint returnTokens0, uint returnTokens1);
 
   constructor(address _token0, address _token1) {
     token0 = IERC20(_token0);
@@ -32,6 +34,10 @@ contract CPAMM {
   function _update(uint _newReserve0, uint _newReserve1) internal {
     reserve0 = _newReserve0;
     reserve1 = _newReserve1;
+  }
+
+  function getSharesPerProvider(address _provider) public view returns(uint) {
+    return balanceOf[_provider];
   }
 
   /**
@@ -250,6 +256,9 @@ contract CPAMM {
     // transfer the tokens out to the provider's address
     token0.transfer(msg.sender, returnedTokens0);
     token1.transfer(msg.sender, returnedTokens1);
+
+    emit WithdrawLiquidity(returnedTokens0,returnedTokens1);
+    
   }
 
 
