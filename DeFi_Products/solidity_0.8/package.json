@@ -12,6 +12,7 @@
   "author": "Stalin Macias",
   "license": "ISC",
   "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.16",
     "bn.js": "^5.2.1",
     "dotenv": "^16.0.2",
     "path": "^0.12.7"
