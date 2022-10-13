@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "./interfaces/compund.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract CompountERC20 {
+contract CompoundERC20 {
   IERC20 public token;
   CErc20 public cToken;
 
@@ -23,13 +23,13 @@ contract CompountERC20 {
     return cToken.balanceOf(address(this));
   }
 
-  function getInto() external returns(uint exchangeRate, uint supplyRate) {
+  function getInfo() external returns(uint exchangeRate, uint supplyRate) {
     exchangeRate = cToken.exchangeRateCurrent();
     supplyRate = cToken.supplyRatePerBlock();
   }
 
-  function balanceOfUnderliying() returns (uint) {
-    return cToken.balanceOfUnderlying(address(token));
+  function balanceOfUnderlying() external returns (uint) {
+    return cToken.balanceOfUnderlying(address(this));
   }
 
   function redeem(uint _cTokenAmount) external {

@@ -10,6 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "bn": "^1.0.5",
+    "dotenv": "^16.0.3",
     "path": "^0.12.7"
   }
 }
