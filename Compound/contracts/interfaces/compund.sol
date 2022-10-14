@@ -16,8 +16,6 @@ interface CErc20 {
 
   function redeemUnderlying(uint) external returns (uint);
 
-  /*
-
   function borrow(uint) external returns (uint);
 
   function borrowBalanceCurrent(address) external returns (uint);
@@ -26,12 +24,12 @@ interface CErc20 {
 
   function repayBorrow(uint) external returns (uint);
 
+  /*
   function liquidateBorrow(
     address borrower,
     uint amount,
     address collateral
   ) external returns (uint);
-
   */
 
 }
@@ -51,8 +49,6 @@ interface CEth {
 
   function redeemUnderlying(uint) external returns (uint);
 
-  /*
-
   function borrow(uint) external returns (uint);
 
   function borrowBalanceCurrent(address) external returns (uint);
@@ -60,7 +56,27 @@ interface CEth {
   function borrowRatePerBlock() external view returns (uint);
 
   function repayBorrow() external payable;
-
-  */
   
+}
+
+interface Comptroller {
+  function markets(address) external view returns (bool, uint, bool);
+
+  function enterMarkets(address[] calldata) external returns (uint[] memory);
+
+  function getAccountLiquidity(address) external view returns (uint, uint, uint);
+
+  function closeFactorMantissa() external view returns (uint);
+
+  function liquidationIncentiveMantissa() external view returns (uint);
+
+  function liquidateCalculateSeizeTokens(
+    address cTokenBorrowed,
+    address cTokenCollateral,
+    uint actualRepayAmount
+  ) external view returns (uint, uint);
+}
+
+interface PriceFeed {
+  function getUnderlyingPrice(address cToken) external view returns (uint);
 }
