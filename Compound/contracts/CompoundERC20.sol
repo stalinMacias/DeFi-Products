@@ -60,7 +60,7 @@ contract CompoundERC20 {
 
   // account liquidity - calculate how much can I borrow?
   // sum of (supplied balance of market entered * col factor) - borrowed
-  function getAccountLiquidity() external view returns (uint) {
+  function getAccountLiquidity() external view returns (uint liquidity, uint shortfall) {
     // liquidity and shortfall in USD scaled up by 1e18
     (uint error, uint _liquidity, uint _shortfall) = comptroller.getAccountLiquidity(address(this));
     require(error == 0, "Error while getting the account liquidity");
@@ -70,8 +70,8 @@ contract CompoundERC20 {
     return (_liquidity, _shortfall);
   }
 
-  function getPriceFeed() external view returns (uint) {
-    return priceFeed.getUnderlyingPrice(address(cToken));
+  function getPriceFeed(address _cToken) external view returns (uint) {
+    return priceFeed.getUnderlyingPrice(address(_cToken));
   }
 
   // enter market and borrow a 50% of the max borr0w amount
