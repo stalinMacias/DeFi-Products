@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./interfaces/compund.sol";
+import "./interfaces/compound.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CompoundERC20 {
   IERC20 public token;
   CErc20 public cToken;
 
-  Comptroller public comptroller = Comptroller(0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B); 
+  Comptroller public comptroller = Comptroller(0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B);
   PriceFeed public priceFeed = PriceFeed(0x922018674c12a7F0D394ebEEf9B58F186CdE13c1);
 
   /**
