@@ -63,7 +63,7 @@ source ./.env
 
 #### Run the ganache-cli --form command directly from the console
 ```
-npx ganache-cli --fork https://mainnet.infura.io/v3/$INFURA_API_KEY --unlock 0x7c8CA1a587b2c4c40fC650dB8196eE66DC9c46F4 --unlock 0x3FE0bF87b9fFf545A85ADc63eC93aCC46B7Ca542 --networkId 999
+npx ganache-cli --fork https://mainnet.infura.io/v3/$INFURA_API_KEY --unlock 0x7c8CA1a587b2c4c40fC650dB8196eE66DC9c46F4 --unlock 0x3FE0bF87b9fFf545A85ADc63eC93aCC46B7Ca542 --unlock 0x218B95BE3ed99141b0144Dba6cE88807c4AD7C09 --networkId 999
 ```
 
 * Equivalent of the above command: - For a strange reason using the env variables is not working even though the env vars are indeed loaded in the terminal - weird

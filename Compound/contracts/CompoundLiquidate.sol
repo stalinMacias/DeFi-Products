@@ -93,8 +93,8 @@ contract CompoundLiquidator {
   CErc20 public cTokenBorrow;
   
   constructor(address _tokenBorrow, address _cTokenBorrow) {
-    tokenBorrow = _tokenBorrow;
-    cTokenBorrow = _cTokenBorrow;
+    tokenBorrow = IERC20(_tokenBorrow);
+    cTokenBorrow = CErc20(_cTokenBorrow);
   }
 
   /**
@@ -102,7 +102,7 @@ contract CompoundLiquidator {
    * @return value comes from calling the closeFactorMantissa() function using the comptroller state variable
    */
   function getCloseFactor() external view returns (uint) {
-    comptroller.closeFactorMantissa();
+    return comptroller.closeFactorMantissa();
   }
 
   /**
@@ -117,7 +117,7 @@ contract CompoundLiquidator {
    * @dev get the exact number of collateral that will be liquidated
    * @param _cTokenBorrowed -> The address of the cToken contract that was borrowed
    * @param _cTokenCollateral -> The address of the cToken contract of the collateral that will be given to the liquidator for liquidating the borrow
-   * @param _actualRepayAmount
+   * @param _actualRepayAmount -> The amount that will be paid to liquidate the borrow
    */
   function getAmountToBeLiquidated(
     address _cTokenBorrowed,
@@ -142,7 +142,7 @@ contract CompoundLiquidator {
    * @param _cTokenCollateral -> The address of the collateral cToken that will be given to the liquidator in exchange for liquidating the borrow
    */
   function liquidate(address _borrower, uint _repayAmount, address _cTokenCollateral) external {
-    tokenBorrow.transferFrom(msg.sender,address(this), _repayAmount);
+    tokenBorrow.transferFrom(msg.sender, address(this), _repayAmount);
     tokenBorrow.approve(address(cTokenBorrow), _repayAmount);
     require(cTokenBorrow.liquidateBorrow(_borrower, _repayAmount, _cTokenCollateral) == 0, "Error while liquidating the borrow");
   }
