@@ -33,7 +33,7 @@ module.exports = {
   USDT,
   WETH,
   WBTC,
-  WETH_10,
+  //WETH_10,
   DAI_WHALE,
   USDC_WHALE,
   USDT_WHALE,
