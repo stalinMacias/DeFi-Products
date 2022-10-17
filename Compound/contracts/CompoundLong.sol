@@ -17,7 +17,7 @@ import "./interfaces/Uniswap.sol";
 contract CompoundLong {
   CEth public cEth;
   CErc20 public cTokenBorrow;
-  IERC20 public cTokenBorrow;
+  IERC20 public tokenBorrow;
   uint public decimals;
 
   Comptroller public comptroller =
