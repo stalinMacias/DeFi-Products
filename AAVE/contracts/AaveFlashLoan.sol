@@ -73,5 +73,4 @@ contract AaveFlashLoan is FlashLoanReceiverBase {
     return true;
   }
 
-
 }
